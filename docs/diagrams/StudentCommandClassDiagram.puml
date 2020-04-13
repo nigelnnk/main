@@ -1,0 +1,54 @@
+@startuml
+!include style.puml
+skinparam arrowThickness 1.1
+skinparam arrowColor STUDENT_COLOUR
+skinparam classBackgroundColor STUDENT_COLOUR
+skinparam classFontColor #white
+skinparam classAttributeFontColor #white
+skinparam classAttributeIconSize 0
+
+
+
+package Model <<Rectangle>> {
+class UniqueStudentList
+class StudentTAble
+class Student {
+-Name name
+-MatricNumber matricNumber
+-Email email
+-Set<Tag> tags
+}
+class Name
+class MatricNumber
+class Email
+package Set<Tag> <<Rectangle>> {
+class Tag
+}
+}
+package Logic <<Rectangle>> {
+interface Parser STUDENT_COLOUR_T1
+class XYZStudentCommandParser STUDENT_COLOUR_T1
+abstract class Command STUDENT_COLOUR_T1
+class XYZStudentCommand STUDENT_COLOUR_T1
+}
+
+
+StudentTAble  *-up- "1" UniqueStudentList
+UniqueStudentList o-up-> "*" Student
+Command <|-right- XYZStudentCommand STUDENT_COLOUR_T1
+XYZStudentCommandParser ..> XYZStudentCommand STUDENT_COLOUR_T1: creates >
+XYZStudentCommandParser .left.> Student STUDENT_COLOUR_T1: creates >
+Parser <|-- XYZStudentCommandParser STUDENT_COLOUR_T1
+note bottom of XYZStudentCommand: XYZCommands refers to \nall Student related commands
+note top of XYZStudentCommandParser: XYZCommandParser refers to \nthe corresponding Parser \nclass of XYZCommand
+
+
+
+Student *-up- "1" Name
+Student *-up- "1"MatricNumber
+Student *-up- "1" Email
+Student *-up- "*" Tag
+
+
+show Student fields
+@enduml

@@ -101,6 +101,11 @@ public interface Model {
      */
     void setStudent(Student target, Student editedStudent);
 
+    /**
+     * Sorts the current list of student in alphabetical order.
+     */
+    void sortStudent();
+
     /** Returns an unmodifiable view of the filtered student list */
     ObservableList<Student> getFilteredStudentList();
 

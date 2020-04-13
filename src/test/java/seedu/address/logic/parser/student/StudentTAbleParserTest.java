@@ -1,4 +1,4 @@
-package seedu.address.logic.parser;
+package seedu.address.logic.parser.student;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -22,6 +22,7 @@ import seedu.address.logic.commands.students.EditStudentCommand;
 import seedu.address.logic.commands.students.EditStudentCommand.EditStudentDescriptor;
 import seedu.address.logic.commands.students.FindStudentCommand;
 import seedu.address.logic.commands.students.ListStudentCommand;
+import seedu.address.logic.parser.TAbleParser;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.student.NameContainsKeywordsPredicate;
 import seedu.address.model.student.Student;

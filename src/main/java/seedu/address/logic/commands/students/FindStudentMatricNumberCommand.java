@@ -10,7 +10,7 @@ import seedu.address.model.Model;
 import seedu.address.model.student.MatricNumberContainsKeywordsPredicate;
 
 /**
- * Finds and lists all students in TAble whose matric number matches the argument keyword given.
+ * Finds and lists the students in TAble whose matric number matches the argument keyword given.
  * Keyword matching is case insensitive.
  */
 public class FindStudentMatricNumberCommand extends Command {

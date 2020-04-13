@@ -67,6 +67,7 @@ import seedu.address.logic.commands.students.EditStudentCommand;
 import seedu.address.logic.commands.students.FindStudentCommand;
 import seedu.address.logic.commands.students.FindStudentMatricNumberCommand;
 import seedu.address.logic.commands.students.ListStudentCommand;
+import seedu.address.logic.commands.students.SortStudentCommand;
 import seedu.address.logic.commands.tutorials.AddTutorialCommand;
 import seedu.address.logic.commands.tutorials.AddTutorialStudentCommand;
 import seedu.address.logic.commands.tutorials.CopyTutorialEmailsCommand;
@@ -108,7 +109,7 @@ public class InputMatcher {
             FindReminderCommand.COMMAND_WORD, ListReminderCommand.COMMAND_WORD,
             SnoozeReminderCommand.COMMAND_WORD, ViewCalendarCommand.COMMAND_WORD,
             CloseCalendarCommand.COMMAND_WORD, ExitCommand.COMMAND_WORD,
-            HelpCommand.COMMAND_WORD));
+            HelpCommand.COMMAND_WORD, SortStudentCommand.COMMAND_WORD));
 
     @FXML
     private TextField commandTextField;

@@ -90,7 +90,8 @@ Format: `help`
 
 * A window containing the link to our User Guide will appear. Click on the Copy Link button to copy the link to our User Guide.
 
-===  Students Feature (Written by Shun De)
+// tag::Student[]
+===  Students Feature (Written by Chiang Shun De)
 ==== Adding a student: `addStudent`
 
 Adds a student to TAble +
@@ -98,6 +99,14 @@ Format: `addStudent name/NAME matric/MATRIC_NUMBER email/EMAIL [tag/TAG]...`
 
 [NOTE]
 ====
+* Students name have a maximum length of 70 characters as it is the standard length for database fields.
+* In TAble there can be duplicate names, but not duplicate emails and matric numbers as they are unique to each student.
+* Tags are sorted alphabetically for easier referencing.
+====
+
+[TIP]
+A student can have any number of tags (including 0), but each tag is limited to a length of 40 characters.
+****
 * The students name will be automatically formatted such that it follows a standard format of
 the first letter of each word being uppercase and the rest lowercase, and a maximum of one space between each word. This
 is done to follow proper naming convention, making it more presentable and readable,
@@ -105,23 +114,27 @@ and remedies any errors which may have happened when extracting the list of stud
 The removal of excess spaces is also done for tags.
 ** For example: `addStudent name/john      doe matric/A0123456X email/johnd@example.com`
 adds a student with the name "John Doe" into the list.
-* Students name have a maximum length of 70 characters as it is the standard length for database fields.
-====
-
-
-[TIP]
-A student can have any number of tags (including 0), but tags are limited to a length of 40 characters
-
+****
 
 Examples:
 
-* `addStudent name/John Doe matric/A0123456X email/johnd@example.com`
-* `addStudent name/Betsy Crowe Daphne matric/A1234567X tag/friend email/betsycrowe@example.com tag/CS2103`
+* `addStudent name/John Tan matric/A0123456X email/johnt@example.com`
 
+Output:
+....
+New student added: John Tan Matric Number: A0123456X Email: johnt@example.com Tags:
+....
+* `addStudent name/Betsy Daphne Anne Lim matric/A1234567X tag/good student email/betsydaphneannelim@example.com tag/CS2103`
+
+Output:
+....
+New student added: Betsy Daphne Anne Lim Matric Number: A1234567X Email: betsydaphneannelim@example.com Tags: [CS2103][good student]
+....
 ==== Listing all students : `listStudent`
 
 Shows a list of all students in TAble. +
 Format: `listStudent`
+
 
 ==== Clears the list of students : `clearStudent`
 
@@ -133,6 +146,12 @@ Format: `clearStudent`
 Edits an existing student in TAble. +
 Format: `editStudent INDEX [name/NAME] [matric/MATRIC_NUMBER] [email/EMAIL] [tag/TAG]...`
 
+[NOTE]
+====
+* The edited student will be reflected on all consults with them or any tutorials they are enrolled in.
+* When editing students, do note that there can be duplicate names in TAble, but not duplicate emails and matric numbers as they are unique to each student.
+====
+
 ****
 * Edits the student at the specified `INDEX`. The index refers to the index number shown in the displayed student list. The index *must be a positive integer* 1, 2, 3, ...
 * At least one of the optional fields must be provided.
@@ -141,14 +160,15 @@ Format: `editStudent INDEX [name/NAME] [matric/MATRIC_NUMBER] [email/EMAIL] [tag
 * You can remove all the student's tags by typing `tag/` without specifying any tags after it.
 ****
 
+
 Examples:
 
-* `editStudent 1 email/johndoe@example.com` +
+* `editStudent 1 email/johntan@example.com` +
 Edits the email address of the 1st student to be `johndoe@example.com`.
-* `editStudent 2 name/Betsy Crower tag/` +
-Edits the name of the 2nd student to be `Betsy Crower` and clears all existing tags.
-* `editStudent 3 matric/A0123456X` +
-Edits the matric number of the 3rd student to be `A0123456X`.
+* `editStudent 2 name/Betsy Lim tag/` +
+Edits the name of the 2nd student to be `Betsy Lim` and clears all existing tags associated with the 2nd student.
+* `editStudent 3 matric/A0123456Z tag/good student` +
+Edits the matric number of the 3rd student to be `A0123456Z` and adds a 'good student' tag
 
 ==== Locating students by name: `findStudent`
 
@@ -157,16 +177,20 @@ Format: `findStudent KEYWORD [MORE_KEYWORDS]`
 
 ****
 * The search is case insensitive. e.g `hans` will match `Hans`
-* The order of the keywords does not matter. e.g. `Hans Bo` will match `Bo Hans`
+* The order of the keywords does not matter. e.g. `Hans Lim` will match `Lim Hans`
 * Only the name is searched.
 * Only full words will be matched e.g. `Han` will not match `Hans`
-* Students matching at least one keyword will be returned (i.e. `OR` search). e.g. `Hans Bo` will return `Hans Gruber`, `Bo Yang`
+* Students matching at least one keyword will be returned (i.e. `OR` search). e.g. `Hans Lim` will return `Hans Tan`, `Lim Yang`
 ****
 
 Examples:
 
 * `findStudent John` +
-Returns `john` and `John Doe`
+Returns students `John Ang` and `John Tan`
+Example output:
+....
+2 students listed!
+....
 * `findStudent Betsy Tim John` +
 Returns any student having names `Betsy`, `Tim`, or `John`
 
@@ -180,7 +204,7 @@ Format: `findStudentMatricNumber matric/MATRIC_NUMBER`
 * Only the matric number is searched.
 * Only full matric number will be matched e.g. `A01234` will not match `A0123456A`, conversely
  `A0123456A` will only return the student with matric number 'A0123456A'
-* Students with matric number matching the given matric number will be returned.
+* The student with matric number matching the given matric number will be returned.
 ****
 
 Examples:
@@ -188,18 +212,23 @@ Examples:
 * `findStudentMatricNumber matric/A0111111X` +
 Returns the student with matric number "A0111111X"
 
-// tag::delete[]
 ==== Deleting a student : `deleteStudent`
 
 Deletes the specified student from TAble. +
 This removes the student from all enrolled tutorials as well. +
 Format: `deleteStudent INDEX`
 
+[NOTE]
+Deleting a student using the deleteStudent command will remove any consultations associated with
+the deleted student and removes the student from any tutorials they were enrolled in.
+
 ****
 * Deletes the student at the specified `INDEX`.
-* The index refers to the index number shown in the displayed student list.
+* The index refers to the index number shown in the displayed student list. By default the student list will be the list
+displayed by the `listStudent` command.
+* You can search for students using the `findStudent` or `findStudentMatricNumber` command and then using the `deleteStudent` command
+with the index based on the generated list by the `findStudent` or `findStudentMatricNumber` command.
 * The index *must be a positive integer* 1, 2, 3, ...
-* Deleting the student from TAble also deletes the student from any tutorial they are enrolled in.
 ****
 
 Examples:
@@ -209,9 +238,15 @@ Examples:
 Deletes the 2nd student in TAble.
 * `findStudent Betsy` +
 `deleteStudent 1` +
-Deletes the 1st student in the results of the `find` command.
+Deletes the 1st student in the list resulting from the `findStudent` command.
 
-// end::delete[]
+==== Sort students alphabetically by name: `sortStudentName`
+Sorts the current list of students according to their name in alphabetical order. If there
+are two students with the same name they will be sorted by matric number, meaning the
+student with the lower matric number will be higher on the list.
+Format: `sortStudentName`
+
+//end::Student[]
 
 //tag::Module[]
 === Module Feature (Written by Nigel Neo)
@@ -799,7 +834,7 @@ There is no need to save manually.
 
 === Student
 * *Add* : `addStudent name/NAME matric/MATRIC_NUMBER email/EMAIL [tag/TAG]...` +
-e.g. `addStudent name/James Tan matric/A0123456X email/jamesho@example.com tag/friend tag/colleague`
+e.g. `addStudent name/James Tan matric/A0123456X email/jamesho@example.com tag/good student tag/hardworking`
 * *Clear* : `clearStudent`
 e.g. `clearStudent`
 * *Delete* : `deleteStudent INDEX` +
@@ -811,6 +846,9 @@ e.g. `findStudent James Jake`
 * *Find Student with a certain matric number* : `findStudentMatricNumber matric/matric_number` +
 e.g. `findStudentMatricNumber matric/A0123456A`
 * *List* : `listStudent`
+* *Sorts the list of students in alphabetical order* : `sortStudent`
+
+
 
 === Module
 * *Add* : `addMod modCode/MODULE_CODE modName/MODULE_NAME` +

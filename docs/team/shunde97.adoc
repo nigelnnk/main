@@ -7,32 +7,33 @@
 
 == Overview
 
-TAble is your handy desktop app, optimized for TAs who prefer to work with a Command Line Interface (CLI) while still having the benefits of a Graphical User Interface (GUI)! Mark attendance, arrange consults, add module notes, and more with TAble! It has a GUI created with JavaFX and written in Java, and has about 10 kLoC.
+TAble is your handy desktop app, optimized for TAs who prefer to work with a Command Line Interface (CLI) while still having the benefits of a Graphical User Interface (GUI)! Mark attendance, arrange consults, add module notes, and more with TAble! It has a GUI created with JavaFX and written in Java, and has about 20 kLoC.
 
 == Summary of contributions
 
-* *Major enhancement*: added *the ability to undo/redo previous commands*
-** What it does: allows the user to undo all previous commands one at a time. Preceding undo commands can be reversed by using the redo command.
-** Justification: This feature improves the product significantly because a user can make mistakes in commands and the app should provide a convenient way to rectify them.
-** Highlights: This enhancement affects existing commands and commands to be added in future. It required an in-depth analysis of design alternatives. The implementation too was challenging as it required changes to existing commands.
-** Credits: _{mention here if you reused any code/ideas from elsewhere or if a third-party library is heavily used in the feature so that a reader can make a more accurate judgement of how much effort went into the feature}_
+* *Major enhancement*: Enabled support for *Students*
+** *What it does*: The user is able to add/edit/delete/list/clear/find all 'Students' in TAble. The user can also find 'Students' in TAble using their names or matric numbers as keywords. Stronger checks are implemented to ensure no duplicate entries for email addresses and matric numbers but allows for duplicate names to appear, which accurately simulates the real world where 2 students can have the same name but they will have different matric numbers and email addresses.
+** *Justification*: Teaching Assistants (TAs) have the main job role of teaching a group of students. Therefore it is important for TAs to have an accurate and updated list of students he can refer to across all his different tutorials so that he can account for every student. This helps consolidate important information about all the students, and allows him to find students, and make edits or delete them if required to maintain an accurate and updated list of students. It also allows efficient tracking of events as changes to the list of students will be accurately reflected in their corresponding tutorial/consults.
+** *Highlights*: A separate student panel which displays all of the user's 'Students' exist for the user to easily keep track of all his students and
+quickly see information information regarding each student.  Any edit or deletion of students will be reflected accordingly in the corresponding tutorial and/or consultation the student is involved. There are also labels which help TAs identify which module and tutorials the student is currently enrolled in.
 
-* *Minor enhancement*: added a history command that allows the user to navigate to previous commands using up/down keys.
-
-* *Code contributed*: [https://github.com[Functional code]] [https://github.com[Test code]] _{give links to collated code files}_
+* *Minor enhancements*:
+** Added labels on the Graphical User Interface which allows the user to identify which module and tutorials each student is currently enrolled in
+*** Eliminates the need for user to look through all tutorials to identify the tutorials each student is currently enrolled in, which is repetitive and can be inefficient especially when the number of tutorials in TAble increases significantly.
+** Implemented a sorting feature which allows the user to sort the students in TAble in alphabetical order. If there are students with the same full names, these students will be sorted using their matric number, the student with the smallest matric number will appear highest on the list.
+* *All code contributed*: [https://nus-cs2103-ay1920s2.github.io/tp-dashboard/#search=shunde97&sort=groupTitle&sortWithin=title&since=2020-02-14&timeframe=commit&mergegroup=false&groupSelect=groupByRepos&breakdown=false[RepoSense - Code Report]]
 
 * *Other contributions*:
 
 ** Project management:
-*** To be updated
-** Enhancements to existing features:
-*** To be updated
+*** Raised issues that needed to be solved and provided some solutions to these problems. [https://github.com/AY1920S2-CS2103-W15-3/main/issues?q=is%3Aissue+involves%3Ashunde97[Issues raised/discussed]]
+*** Managed Graphical User Interface for StudentListPanel of the application https://github.com/AY1920S2-CS2103-W15-3/main/pull/201[#201]
 ** Documentation:
-*** To be updated
-** Tools:
-*** To be updated
-
-_{you can add/remove categories in the list above}_
+*** Contributed in the User Guide and Developer Guide for *Student* features, including adding relevant PlantUML diagrams in the Developer Guide to enhance comprehensibility of the codebase and the structure of the feature.
+*** Fix and Maintain Product Website https://github.com/AY1920S2-CS2103-W15-3/main/pull/227[#227]
+** Summary of contributions:
+*** Created over [https://github.com/AY1920S2-CS2103-W15-3/main/pulls?q=is%3Apr+author%3Ashunde97[19 pull requests]] on GitHub
+*** Reviewed over [https://github.com/AY1920S2-CS2103-W15-3/main/pulls?q=is%3Apr+reviewed-by%3Ashunde97[11 pull requests]]on GitHub
 
 == Contributions to the User Guide
 
@@ -41,7 +42,7 @@ _{you can add/remove categories in the list above}_
 |_Given below are sections I contributed to the User Guide. They showcase my ability to write documentation targeting end-users._
 |===
 
-include::
+include::../UserGuide.adoc[tag=Student]
 
 == Contributions to the Developer Guide
 
@@ -49,4 +50,8 @@ include::
 |_Given below are sections I contributed to the Developer Guide. They showcase my ability to write technical documentation and the technical depth of my contributions to the project._
 |===
 
-_To be updated_
+include::../DeveloperGuide.adoc[tag=student]
+
+== Use Cases
+include::../DeveloperGuide.adoc[tag=sd]
+

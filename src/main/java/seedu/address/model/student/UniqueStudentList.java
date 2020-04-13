@@ -131,6 +131,13 @@ public class UniqueStudentList implements Iterable<Student> {
     }
 
     /**
+     * Sorts the list of students in alphabetical order.
+     */
+    public void sortStudents() {
+        FXCollections.sort(internalList);
+    }
+
+    /**
      * Returns the backing list as an unmodifiable {@code ObservableList}.
      */
     public ObservableList<Student> asUnmodifiableObservableList() {

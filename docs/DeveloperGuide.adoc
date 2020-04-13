@@ -66,9 +66,9 @@ image::LogicClassDiagram.png[]
 [discrete]
 ==== How the architecture components interact with each other
 
-The _Sequence Diagram_ below shows how the components interact with each other for the scenario where the user issues the command `delete 1`.
+The _Sequence Diagram_ below shows how the components interact with each other for the scenario where the user issues the command `deleteStudent 1`.
 
-.Component interactions for `delete 1` command
+.Component interactions for `deleteStudent 1` command
 image::ArchitectureSequenceDiagram.png[]
 
 The sections below give more details of each component.
@@ -106,9 +106,9 @@ link:{repoURL}/src/main/java/seedu/address/logic/Logic.java[`Logic.java`]
 .  The result of the command execution is encapsulated as a `CommandResult` object which is passed back to the `Ui`.
 .  In addition, the `CommandResult` object can also instruct the `Ui` to perform certain actions, such as displaying help to the user.
 
-Given below is the Sequence Diagram for interactions within the `Logic` component for the `execute("delete 1")` API call.
+Given below is the Sequence Diagram for interactions within the `Logic` component for the `execute("deleteStudent 1")` API call.
 
-.Interactions Inside the Logic Component for the `delete 1` Command
+.Interactions Inside the Logic Component for the `deleteStudent 1` Command
 image::DeleteSequenceDiagram.png[]
 
 NOTE: The lifeline for `DeleteCommandParser` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline reaches the end of diagram.
@@ -149,6 +149,73 @@ Classes used by multiple components are in the `seedu.address.commons` package.
 == Implementation
 
 This section describes some noteworthy details on how certain features are implemented.
+
+// tag::student[]
+=== Student feature (Written by Chiang Shun De)
+*Table* allows NUS SoC teaching assistants to track and record all students that they will be teaching, and maintain accurate details of the students, such as their name, matriculation number (henceforth referred to as matric number), emails, and tags which serves as remarks.  Changes to the student’s identity fields or deletion of student will also be reflected in the corresponding tutorial or consultation associated with the student.
+
+==== Implementation
+A `Student` class stores all relevant information of students. The main components are the students’ name, matric number, email address. `Student` can also store the user's remarks about the student through the tag parameter, which will sort the tags, if there are more than 1 tag, in alphabetical order. The class diagram below shows how all the different components interact to allow the student feature to function.
+
+.Class diagram of 'Student' feature, with only directly related classes displayed
+image::StudentCommandClassDiagram.png[]
+
+Referencing the above class diagram, a `Student` contains 4 key attributes,
+the student's `name`, `matricNumber`, `email`, and a `set<Tag>` of `Tag`, which could be empty.
+The unique identifier of each student is the `matricNumber`, i.e. no two students in TAble can have the same matric number.
+
+
+The following sequence diagram illustrates the `findStudentMatricNumber` command, where a student which has the same matric number as the given matric number is found. The user must key in a correctly formatted matric number.
+
+.Sequence diagram of 'findStudentMatricNumber' command
+image::FindStudentMatricNumberSequenceDiagram.png[]
+
+Referencing the above sequence diagram, `LogicManager` executes the user's input and calls `parseCommand(input)` of `TAbleParser`.
+`TAbleParser` then returns a new `FindStudentMatricNumberCommandParser()`. Via `FindStudentMatricNumberCommandParser`, the provided matric number is parsed into a `MatricNumberContainsKeywordsPredicate` predicate and a `FindStudentMatricNumberCommand` object with the `MatricNumberContainsKeywordsPredicate` predicate is created.
+Calling `updateFilteredStudentList(predicate)`, the provided matric number is compared against the matric number of students currently in TAble and the student list is then updated with the list of students whose matric number matches the provided matric number.
+The command returns a formatted string which shows how many students match the given matric number, which indicate that the command is called successfully
+
+The following activity diagram illustrates what happens when the `addStudent` command is called to add a student into TAble.
+There is a need to check that the given matric number and email address does not already exist in TAble
+
+.Activity diagram for 'addStudent' command in the 'Student' feature
+image::AddStudentActivityDiagram.png[]
+
+Referencing the above activity diagram, TAble will first check that all prefixes are present and formatted correctly, and that no multiple of the same prefix exists.
+It will then proceed to check if the name, matric number, email address, and tags (if any) are formatted correctly.
+It will then create a `Student` object using the provided name, matric number, email address, and tags (if any) and then check if there is a duplicate student inside TAble.
+If there are no duplicate student inside TAble, it will check across every student in TAble to see if the provided matric number or email address already exists inside TAble.
+If the provided matric number or email address does not belong to any student inside TAble already, the created student is then added into TAble and a message is returned indicating success.
+The new student will appear in the TAble.
+
+==== Design Considerations
+
+===== Sorting Students
+
+[width="100%", cols="1, 5, 5"]
+|===
+||*Alternative 1 (Current Choice):* Sort the list of students only when user enters a sort command
+|*Alternative 2 :* Automatically sort the list of students whenever a student is added/edited/deleted
+
+|*Pros*
+|User can decide how they want the list to be sorted (e.g. by alphabetical order).
+|It is intuitive for the students to be sorted in alphabetical order, allows for easier referencing.
+
+|*Cons*
+|User have to type the sort command each time a new student is added or an existing student is edited/deleted.
+|User are not able to sort the list of students according to their preferences. It is quite inefficient as the system
+would have to sort the list of students every a new student is added or an existing student is edited/deleted.
+
+|===
+
+Reason for choosing Alternative 1:  From a user design perspective, a teaching assistant would scroll through the current list of students
+to check if the student has been added , or to identify which tutorial and modules the student has been added in. When the list gets bigger,
+he would have to scroll further to search for the student he is looking for or to check if a particular student has been added. With both `findStudent` and `findStudentMatricNumber` commands present,
+it would be more efficient to find the student using either of 2 commands than scrolling through the list of students. This also aligns with the project constraints that typing is preferred over mouse use.
+The functionality of sorting the list of students alphabetically via a command was implemented to bring about a better user experience and a more presentable list of students.
+However the functionality of both `findStudent` and `findStudentMatricNumber` provides an efficient solution to identify students or check if they have been added, without the need to sort the list of students.
+
+// end::student[]
 
 // tag::module[]
 === Module feature (Written by Nigel Neo)
@@ -512,6 +579,8 @@ Priorities: High (must have) - `* * \*`, Medium (nice to have) - `* \*`, Low (un
 
 |`* * *` |teaching assistant |find a student by name |locate details of students without having to go through the entire list
 
+|`* * *` |teaching assistant |find a student by matric number |locate students with the specific matric number without having to go through the entire list
+
 |`* * *` |teaching assistant |add consult timing and locations |keep track of all new consults promptly
 
 |`* * *` |teaching assistant |edit consult timing and locations |change consults when the students have to reschedule
@@ -573,7 +642,7 @@ Priorities: High (must have) - `* * \*`, Medium (nice to have) - `* \*`, Low (un
 [appendix]
 == Use Cases
 
-(For all use cases below, the *System* is the `TAble Application` and the *Actor* is the `user`, unless specified otherwise)
+(For all use cases below, the *System* is the `TAble Application` and the *Actor* is the `user` which is a Teaching Assistant at NUS SOC, unless specified otherwise)
 
 [discrete]
 === Use case: Delete student (U01)
@@ -601,9 +670,184 @@ Use case ends.
 +
 Use case resumes at step 2.
 
+// tag::sd[]
+[discrete]
+=== Use case: Add student (U02)
+
+*MSS*
+
+1.  User requests to add a student with name, matric number, email address and tag included
+2.  System saves the new student into the database
++
+Use case ends.
+
+*Extensions*
+
+[none]
+* 1a. The name, matric number, or email address is not included.
++
+[none]
+** 1a1. System shows an error message which indicates that an invalid format was given.
++
+[none]
+** 1a2. User enters student with all required fields included.
++
+Use case resumes from step 2.
+
+[none]
+* 1b. The user enters a matric number or email address which already exists in the database.
++
+[none]
+** 1b1. System shows an error message that the given identity field already exists.
++
+Use case ends.
 
 [discrete]
-=== Use case: Add consult (U02)
+=== Use case: Edit student (U03)
+
+*MSS*
+
+1.  User requests to update either the name, matric number, email address, or tags of an existing student based on the student's index.
+2.  Systems updates the students according to the User's request.
++
+Use case ends.
+
+*Extensions*
+
+[none]
+* 1a. The given index is invalid.
++
+[none]
+** 1a1. System shows an error message which indicates that an invalid command was given.
++
+Use case ends.
+
+[none]
+* 1b. The name, matric number, email address provided is in the invalid format.
++
+[none]
+** 1b1. System shows an error message which indicates that the field to be edited must be
+provided in the correct format.
++
+[none]
+** 1b2. User enters the required fields in the correct format.
++
+Use case resumes from step 2.
+
+[none]
+* 1c. The matric number or email address provided already exists in the database.
++
+[none]
+** 1c1. System shows an error message which indicates that the matric number or email address to be changed to already exists in the database.
++
+Use case ends.
+
+[discrete]
+=== Use case: Find student by name (U04)
+
+*MSS*
+
+1.  User requests to find all students matching with some keywords.
+2. System returns a list with all matching students from the database.
++
+Use case ends.
+
+*Extensions*
+
+[none]
+* 1a. The keyword is not included.
++
+[none]
+** 1a1. System shows an error message the an invalid command was provided.
++
+[none]
+** 1a2. User reenters the command with the keyword included.
++
+Use case resumes from step 2.
+
+[none]
+* 2a. The list is empty.
++
+Use case ends.
+
+
+[discrete]
+=== Use case: Find student by matric number (U05)
+
+*MSS*
+
+1.  User requests to find the student with the matching matric number.
+2. System returns a list with the matching student from the database.
++
+Use case ends.
+
+*Extensions*
+
+[none]
+* 1a. The matric number is not included.
++
+[none]
+** 1a1. System shows an error message that indicates matric number to be searched cannot be empty.
++
+[none]
+** 1a2. User reenters the command with the matric number included.
++
+Use case resumes from step 2.
+
+[none]
+* 1b. User keys in more than one matric number.
++
+[none]
+** 1b1. System shows an error message that indicates not to repeat prefixes.
++
+[none]
+** 1b2. User reenters the command with only one matric number included.
++
+Use case resumes from step 2.
+
+[none]
+* 2a. The list is empty.
++
+Use case ends.
+
+[discrete]
+=== Use case: List students (U06)
+
+*MSS*
+
+1.  User requests to list all existing students in the database
+2.  System shows the list of existing students
++
+Use case ends.
+
+*Extensions*
+
+[none]
+* 2a. The list is empty.
++
+Use case ends.
+
+[discrete]
+=== Use case: Sort students (U07)
+
+*MSS*
+
+1.  User requests to sort all existing students in the database
+2.  System shows the list of existing students sorted in alphabetical order
++
+Use case ends.
+
+*Extensions*
+
+[none]
+* 2a. The list is empty.
++
+Use case ends.
+
+// end::sd[]
+
+[discrete]
+=== Use case: Add consult (U08)
 
 *MSS*
 
@@ -625,7 +869,7 @@ Use case ends.
 // tag::hc[]
 
 [discrete]
-=== Use case: Edit consult (U03)
+=== Use case: Edit consult (U09)
 
 *MSS*
 
@@ -652,7 +896,7 @@ Use case ends.
 Use case ends.
 
 [discrete]
-=== Use case: Delete consult (U04)
+=== Use case: Delete consult (U10)
 
 *MSS*
 
@@ -680,7 +924,7 @@ Use case ends.
 // end::hc[]
 
 [discrete]
-=== Use case: List consults (U05)
+=== Use case: List consults (U11)
 
 *MSS*
 
@@ -698,7 +942,7 @@ Use case ends.
 
 // tag::sarah[]
 [discrete]
-=== Use case: Add tutorial (U06)
+=== Use case: Add tutorial (U12)
 
 *MSS*
 
@@ -718,7 +962,7 @@ Use case ends.
 Use case ends.
 
 [discrete]
-=== Use case: Delete tutorial (U07)
+=== Use case: Delete tutorial (U13)
 
 *MSS*
 
@@ -746,7 +990,7 @@ Use case ends.
 Use case ends.
 
 [discrete]
-=== Use case: List tutorials (U08)
+=== Use case: List tutorials (U14)
 
 *MSS*
 
@@ -756,7 +1000,7 @@ Use case ends.
 Use case ends.
 
 [discrete]
-=== Use case: Add a student to an existing tutorial (U09)
+=== Use case: Add a student to an existing tutorial (U15)
 
 *MSS*
 
@@ -792,7 +1036,7 @@ Use case ends.
 Use case ends.
 
 [discrete]
-=== Use case: Remove a student from an existing tutorial (U10)
+=== Use case: Remove a student from an existing tutorial (U16)
 
 *MSS*
 
@@ -828,7 +1072,7 @@ Use case ends.
 Use case ends.
 
 [discrete]
-=== Use case: Mark attendance of student (U11)
+=== Use case: Mark attendance of student (U17)
 
 *MSS*
 
@@ -856,7 +1100,7 @@ Use case ends.
 Use case ends.
 
 [discrete]
-=== Use case: View attendance sheet (U12)
+=== Use case: View attendance sheet (U18)
 
 *MSS*
 
@@ -868,7 +1112,7 @@ Use case ends.
 
 // tag::cranston[]
 [discrete]
-=== Use case: Add reminder (U13)
+=== Use case: Add reminder (U19)
 
 *MSS*
 
@@ -888,7 +1132,7 @@ Use case ends.
 Use case ends.
 
 [discrete]
-=== Use case: Mark reminder as done (U14)
+=== Use case: Mark reminder as done (U20)
 
 *MSS*
 
@@ -915,7 +1159,7 @@ Use case ends.
 Use case ends.
 
 [discrete]
-=== Use case: Update reminder (U15)
+=== Use case: Update reminder (U21)
 
 *MSS*
 
@@ -942,7 +1186,7 @@ Use case ends.
 Use case ends.
 
 [discrete]
-=== Use case: Delete reminder (U16)
+=== Use case: Delete reminder (U22)
 
 *MSS*
 
@@ -962,7 +1206,7 @@ Use case ends.
 Use case ends.
 
 [discrete]
-=== Use case: List reminders (U17)
+=== Use case: List reminders (U23)
 
 *MSS*
 
@@ -979,7 +1223,7 @@ Use case ends.
 Use case ends.
 
 [discrete]
-=== Use case: Find reminders (U18)
+=== Use case: Find reminders (U24)
 
 *MSS*
 
@@ -1003,7 +1247,7 @@ Use case ends.
 Use case ends.
 
 [discrete]
-=== Use case: Snooze reminder (U19)
+=== Use case: Snooze reminder (U25)
 
 *MSS*
 
@@ -1038,7 +1282,7 @@ Use case ends.
 // end::cranston[]
 
 [discrete]
-=== Use case: Create Module (U20)
+=== Use case: Create Module (U26)
 
 *MSS*
 
@@ -1063,7 +1307,7 @@ Use case ends.
 Use case ends.
 
 [discrete]
-=== Use case: View Module (U21)
+=== Use case: View Module (U27)
 
 *MSS*
 
@@ -1083,7 +1327,7 @@ Use case ends.
 Use case ends.
 
 [discrete]
-=== Use case: Update Module (U22)
+=== Use case: Update Module (U28)
 
 *MSS*
 
@@ -1103,7 +1347,7 @@ Use case ends.
 Use case ends.
 
 [discrete]
-=== Use case: Add Module links (U23)
+=== Use case: Add Module links (U29)
 
 *MSS*
 
@@ -1131,7 +1375,7 @@ Use case ends.
 Use case ends.
 
 [discrete]
-=== Use case: Clear All Module links (U24)
+=== Use case: Clear All Module links (U30)
 
 *MSS*
 
@@ -1152,7 +1396,7 @@ Use case ends.
 
 
 [discrete]
-=== Use case: Open Calendar Window (U25)
+=== Use case: Open Calendar Window (U31)
 
 *MSS*
 
@@ -1240,16 +1484,31 @@ These instructions only provide a starting point for testers to work on; testers
 .. Test case: Type 'add' into command box and press kbd:[Tab] +
    Expected: The first suggested add command is displayed in the command box.
 
+=== Adding a student
+
+. Adding a student into TAble
+
+.. Test case: `addStudent name/Bob Bee matric/A0183838X email/bobbee@example.com tag/test` +
+   Expected: student 'Bob Bee' with the above matric number, email address, and tag is added into the list. Details of the added student shown in the status message. Timestamp in the status bar is updated.
+.. Test case: `addStudent name/ matric/A0111111R email/blank@example.com` +
+   Expected: No student is added. Error message displayed. Error details shown in the status message
+.. Test case: `addStudent name/Andy Ang matric/A0123456789X email/blank@example.com` +
+   Expected: No student is added. Error message displayed. Error details shown in the status message
+.. Test case: `addStudent name/ matric/ email/` +
+   Expected: No student is added. Error message displayed. Error details shown in the status message
+.. Other incorrect delete commands to try: `addStudent`, `addStudent name/Anthony Lee matric/A0147852X email/[EMAIL]` (where [EMAIL] is an email address which currently exists in TAble) + `addStudent name/Anthony Lee matric/[MATRIC_NUMBER] email/anthonlee@example.com` (where [MATRIC_NUMBER] is a matric number which currently exists in TAble)
+   Expected: Similar to previous.
+
 === Deleting a student
 
 . Deleting a student while all students are listed
 
-.. Prerequisites: List all students using the `listStudent` command. Multiple students in the list.
+.. Prerequisites: List all students using the `listStudent` command. 1 or more students in the list.
 .. Test case: `deleteStudent 1` +
    Expected: First student is deleted from the list. Details of the deleted student shown in the status message. Timestamp in the status bar is updated.
 .. Test case: `deleteStudent 0` +
-   Expected: No student is deleted. Error details shown in the status message. Status bar remains the same.
-.. Other incorrect delete commands to try: `deleteStudent`, `deleteStudent x` (where x is larger than the list size) _{give more}_ +
+   Expected: No student is deleted. Error message displayed. Status bar remains the same.
+.. Other incorrect delete commands to try: `deleteStudent`, `deleteStudent x` (where x is larger than the list size), `deleteStudent y` (where y is a float or negative number)+
    Expected: Similar to previous.
 
 

@@ -167,6 +167,11 @@ public class ModelManager implements Model {
         studentTAble.setStudent(target, editedStudent);
     }
 
+    @Override
+    public void sortStudent() {
+        studentTAble.sortStudent();
+    }
+
     /**
      * Gets student with specific index number.
      *

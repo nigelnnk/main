@@ -17,7 +17,14 @@ import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.core.Messages;
 import seedu.address.logic.Logic;
 import seedu.address.logic.commands.CommandResult;
+import seedu.address.logic.commands.consults.ListConsultCommand;
 import seedu.address.logic.commands.exceptions.CommandException;
+import seedu.address.logic.commands.mods.ListModCommand;
+import seedu.address.logic.commands.mods.ViewModInfoCommand;
+import seedu.address.logic.commands.students.FindStudentCommand;
+import seedu.address.logic.commands.students.FindStudentMatricNumberCommand;
+import seedu.address.logic.commands.students.ListStudentCommand;
+import seedu.address.logic.commands.tutorials.ListTutorialCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.event.tutorial.Tutorial;
 import seedu.address.ui.calendar.CalendarWindow;
@@ -187,7 +194,7 @@ public class MainWindow extends UiPart<Stage> {
     }
 
     void setSplitPane() {
-        splitPanePlaceholder.lookupAll(".split-pane-divider").stream()
+        splitPanePlaceholder.lookupAll(".split-pane-divider")
                 .forEach(div -> div.setMouseTransparent(true));
     }
 
@@ -223,27 +230,30 @@ public class MainWindow extends UiPart<Stage> {
      */
     @FXML
     public void handleList(String commandText) {
-        if (commandText.contains(" ")) {
-            commandText = commandText.substring(0, commandText.indexOf(" "));
-        }
+        switch(commandText.split(" ", 2)[0]) {
 
-        switch(commandText) {
-        case "listStudent":
-        case "findStudent":
+        case ListStudentCommand.COMMAND_WORD:
+        case FindStudentCommand.COMMAND_WORD:
+        case FindStudentMatricNumberCommand.COMMAND_WORD:
             firstTabPanePlaceholder.getSelectionModel().select(0);
             break;
-        case "listTutorial":
+
+        case ListTutorialCommand.COMMAND_WORD:
             firstTabPanePlaceholder.getSelectionModel().select(1);
             break;
-        case "listMod":
+
+        case ListModCommand.COMMAND_WORD:
             firstTabPanePlaceholder.getSelectionModel().select(2);
             break;
-        case "listConsult":
+
+        case ListConsultCommand.COMMAND_WORD:
             secondTabPanePlaceholder.getSelectionModel().select(0);
             break;
-        case "viewModInfo":
+
+        case ViewModInfoCommand.COMMAND_WORD:
             secondTabPanePlaceholder.getSelectionModel().select(2);
             break;
+
         default:
             break;
         }

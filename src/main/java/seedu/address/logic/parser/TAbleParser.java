@@ -37,6 +37,7 @@ import seedu.address.logic.commands.students.EditStudentCommand;
 import seedu.address.logic.commands.students.FindStudentCommand;
 import seedu.address.logic.commands.students.FindStudentMatricNumberCommand;
 import seedu.address.logic.commands.students.ListStudentCommand;
+import seedu.address.logic.commands.students.SortStudentCommand;
 import seedu.address.logic.commands.tutorials.AddTutorialCommand;
 import seedu.address.logic.commands.tutorials.AddTutorialStudentCommand;
 import seedu.address.logic.commands.tutorials.CopyTutorialEmailsCommand;
@@ -134,7 +135,11 @@ public class TAbleParser {
         case HelpCommand.COMMAND_WORD:
             return new HelpCommand();
 
-        // ======================================== Consult Commands ==============================
+        case SortStudentCommand.COMMAND_WORD:
+            return new SortStudentCommand();
+
+
+            // ======================================== Consult Commands ==============================
 
         case AddConsultCommand.COMMAND_WORD:
             return new AddConsultCommandParser().parse(arguments);

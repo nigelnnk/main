@@ -161,6 +161,7 @@ public class CalendarWindow extends UiPart<Stage> {
      */
     public void show() {
         logger.fine("Showing Calendar Window.");
+        fillDays();
         getRoot().show();
         getRoot().centerOnScreen();
     }
@@ -177,6 +178,7 @@ public class CalendarWindow extends UiPart<Stage> {
      * Focuses on the Calendar window.
      */
     public void focus() {
+        fillDays();
         getRoot().requestFocus();
     }
 

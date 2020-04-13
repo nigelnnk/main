@@ -19,7 +19,7 @@ Role: Developer
 
 '''
 
-=== Han Ching
+=== Yong Han Ching
 image::hanchingyong.png[width="150", align="left"]
 {empty}[http://github.com/hanchingyong[github]] [<<hanchingyong#, portfolio>>]
 
@@ -43,7 +43,7 @@ Role: Developer
 
 '''
 
-=== Shun De
+=== Chiang Shun De
 image::shunde97.png[width="150", align="left"]
 {empty}[http://github.com/shunde97[github]] [<<shunde97#, portfolio>>]
 

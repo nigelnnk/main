@@ -14,7 +14,7 @@ import seedu.address.model.tag.Tag;
  * Represents a Student in TAble.
  * Guarantees: details are present and not null, field values are validated, immutable.
  */
-public class Student {
+public class Student implements Comparable<Student> {
 
     // Identity fields
     private final Name name;
@@ -106,6 +106,15 @@ public class Student {
                 && otherStudent.getMatricNumber().equals(getMatricNumber())
                 && otherStudent.getEmail().equals(getEmail())
                 && otherStudent.getTags().equals(getTags());
+    }
+
+    @Override
+    public int compareTo(Student student) {
+        if (this.getName().toString().compareTo(student.getName().toString()) == 0) {
+            return this.getMatricNumber().value.compareTo(student.getMatricNumber().value);
+        } else {
+            return this.getName().toString().compareTo(student.getName().toString());
+        }
     }
 
     @Override

@@ -10,6 +10,7 @@ public class Messages {
     public static final String MESSAGE_REPEATED_PREFIXES = "Please do not repeat prefixes!\n%1$s";
     public static final String MESSAGE_INVALID_STUDENT_DISPLAYED_INDEX = "The student index provided is invalid.";
     public static final String MESSAGE_STUDENTS_LISTED_OVERVIEW = "%1$d students listed!";
+    public static final String MESSAGE_STUDENTS_SORTED_OVERVIEW = "%1$d students sorted alphabetically!";
     public static final String MESSAGE_STUDENT_EMPTY_MATRIC_NUMBER = "Matric Number to be searched cannot be empty!\n";
 
     public static final String MESSAGE_INVALID_CONSULT_DISPLAYED_INDEX = "The consult index provided is invalid.";

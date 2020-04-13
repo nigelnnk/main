@@ -190,6 +190,11 @@ public class AddTutorialCommandTest {
         }
 
         @Override
+        public void sortStudent() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
         public ObservableList<Student> getFilteredStudentList() {
             throw new AssertionError("This method should not be called.");
         }
